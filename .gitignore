@@ -1,0 +1,5 @@
+.vscode
+.terraform
+*tfstate*
+id_rsa.pub
+admin_password

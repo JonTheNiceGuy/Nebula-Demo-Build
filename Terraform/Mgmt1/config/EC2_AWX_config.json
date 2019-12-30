@@ -1,0 +1,154 @@
+{
+  "ansible_fqdn":"$AWX_Hostname",
+  "admin_password":"$AWX_Password",
+  "organizations": {
+    "Nebula Organisation": {
+      "description": "Managing Nebula Overlay",
+      "credentials": {
+        "AWS": {
+          "kind": "aws",
+          "username": "$AWS_TOKEN",
+          "password": "$AWS_SECRET"
+        },
+        "Azure": {
+          "kind": "azure_rm",
+          "client": "$AZURE_CLIENT_ID",
+          "secret": "$AZURE_SECRET",
+          "subscription": "$AZURE_SUBSCRIPTION_ID",
+          "tenant": "$AZURE_TENANT"
+        },
+        "SSH": {
+          "username": "ec2",
+          "ssh_key_data": "$SSH_KEY"
+        },
+        "Vault": {
+          "kind": "vault",
+          "vault_password": "$VAULT"
+        }
+      },
+      "projects": {
+        "Ansible Managed Nebula": {
+          "scm_url": "https://github.com/JonTheNiceGuy/Nebula-Demo-Install_and_Manage",
+          "scm_clean": "yes",
+          "scm_update_on_launch": "yes"
+        }
+      },
+      "inventory": {
+        "Nebula Environment": {
+          "extra_vars": {
+            "ca_server": "$CA_Server"
+          },
+          "source": {
+            "EC2 Bastions": {
+              "credential": "AWS",
+              "update_on_launch": "true",
+              "update_cache_timeout": "10",
+              "instance_filters": "tag:HasRoleBastion=true",
+              "type": "ec2",
+              "source_vars": {
+                "hostname_variable": "tag_Name",
+                "group_by_instance_id": "False",
+                "group_by_region": "False",
+                "group_by_availability_zone":"False",
+                "group_by_aws_account": "False",
+                "group_by_ami_id":"False",
+                "group_by_instance_type":"False",
+                "group_by_instance_state": "False",
+                "group_by_platform":"False",
+                "group_by_key_pair":"False",
+                "group_by_vpc_id":"False",
+                "group_by_security_group":"True",
+                "group_by_tag_keys":"True",
+                "group_by_tag_none":"False",
+                "group_by_route53_names":"False",
+                "group_by_rds_engine":"False",
+                "group_by_rds_parameter_group":"False",
+                "group_by_elasticache_engine":"False",
+                "group_by_elasticache_cluster":"False",
+                "group_by_elasticache_parameter_group":"False",
+                "group_by_elasticache_replication_group":"False"
+              }
+            },
+            "EC2 Hosts Behind Bastions": {
+              "credential": "AWS",
+              "update_on_launch": "true",
+              "update_cache_timeout": "10",
+              "instance_filters": "tag:Bastion_ip=*",
+              "type": "ec2",
+              "source_vars": {
+                "hostname_variable": "tag_Name",
+                "vpc_destination_variable": "private_ip_address",
+                "group_by_instance_id": "False",
+                "group_by_region": "False",
+                "group_by_availability_zone":"False",
+                "group_by_aws_account": "False",
+                "group_by_ami_id":"False",
+                "group_by_instance_type":"False",
+                "group_by_instance_state": "False",
+                "group_by_platform":"False",
+                "group_by_key_pair":"False",
+                "group_by_vpc_id":"False",
+                "group_by_security_group":"True",
+                "group_by_tag_keys":"True",
+                "group_by_tag_none":"False",
+                "group_by_route53_names":"False",
+                "group_by_rds_engine":"False",
+                "group_by_rds_parameter_group":"False",
+                "group_by_elasticache_engine":"False",
+                "group_by_elasticache_cluster":"False",
+                "group_by_elasticache_parameter_group":"False",
+                "group_by_elasticache_replication_group":"False"
+              }
+            },
+            "EC2 Management Environment": {
+              "credential": "AWS",
+              "update_on_launch": "true",
+              "update_cache_timeout": "10",
+              "instance_filters": "tag:Name=vmMgmt*,tag:Name=vmmgmt*",
+              "type": "ec2",
+              "source_vars": {
+                "hostname_variable": "tag_Name",
+                "vpc_destination_variable": "private_ip_address",
+                "group_by_instance_id": "False",
+                "group_by_region": "False",
+                "group_by_availability_zone":"False",
+                "group_by_aws_account": "False",
+                "group_by_ami_id":"False",
+                "group_by_instance_type":"False",
+                "group_by_instance_state": "False",
+                "group_by_platform":"False",
+                "group_by_key_pair":"False",
+                "group_by_vpc_id":"False",
+                "group_by_security_group":"True",
+                "group_by_tag_keys":"True",
+                "group_by_tag_none":"False",
+                "group_by_route53_names":"False",
+                "group_by_rds_engine":"False",
+                "group_by_rds_parameter_group":"False",
+                "group_by_elasticache_engine":"False",
+                "group_by_elasticache_cluster":"False",
+                "group_by_elasticache_parameter_group":"False",
+                "group_by_elasticache_replication_group":"False"
+              }
+            },
+            "Azure": {
+              "credential": "Azure",
+              "update_on_launch": "true",
+              "update_cache_timeout": "10",
+              "type": "azure_rm"
+            }
+          }
+        }
+      },
+      "job_templates": {
+        "Nebula EC2": {
+          "project": "Ansible Managed Nebula",
+          "playbook": "site.yml",
+          "credential": "SSH",
+          "vault_credential": "Vault",
+          "inventory": "Nebula Environment"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+[submodule "Nebula_Install_And_Manage"]
+	path = Nebula_Install_And_Manage
+	url = https://github.com/JonTheNiceGuy/Nebula-Demo-Install_and_Manage.git
+[submodule "AWX_Install_And_Manage"]
+	path = AWX_Install_And_Manage
+	url = https://github.com/JonTheNiceGuy/Install_AWX_And_Configure_It.git
+[submodule "Terraform/Mgmt1/config"]
+	path = Terraform/Mgmt1/config
+	url = https://gist.github.com/a057a8f19bb3cb1df839cda6d16f6b0d.git
